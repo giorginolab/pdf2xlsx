@@ -15,6 +15,8 @@ short_description: Extract PDF tables to XLSX with preview.
 
 Extract tables from a PDF and write them into a single XLSX worksheet.
 
+Live app: https://huggingface.co/spaces/tonigi/pdf2xlsx
+
 ## Install
 
 ```bash
