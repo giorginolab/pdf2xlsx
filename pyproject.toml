@@ -6,6 +6,7 @@ readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
     "gradio>=5.23.3",
+    "pandas>=2.2.3",
     "pdf2docx>=0.5.12",
     "typer>=0.24.1",
     "xlsxwriter>=3.2.9",
