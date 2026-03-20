@@ -1,10 +1,18 @@
 [project]
-name = "docx2xlsx"
+name = "pdf2xlsx"
 version = "0.1.0"
-description = "Add your description here"
+description = "Extract tables from a PDF into an XLSX workbook."
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
     "pdf2docx>=0.5.12",
+    "typer>=0.24.1",
     "xlsxwriter>=3.2.9",
 ]
+
+[project.scripts]
+pdf2xlsx = "pdf2xlsx.cli:app"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
