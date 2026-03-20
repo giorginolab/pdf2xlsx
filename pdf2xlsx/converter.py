@@ -25,12 +25,17 @@ def extract_tables_to_xlsx(
     finally:
         converter.close()
 
-    rows = [row for table in tables for row in table]
+    rows: list[list[Any]] = []
+    for table_number, table in enumerate(tables, start=1):
+        column_count = max((len(row) for row in table), default=0)
+        for row_id, row in enumerate(table, start=1):
+            rows.append([table_number, row_id, column_count, *_normalize_row(row)])
 
     with xlsxwriter.Workbook(str(destination)) as workbook:
         worksheet = workbook.add_worksheet("Tables")
+        worksheet.write_row(0, 0, ["TableID", "RowID", "Columns", "Data"])
 
-        for row_num, data in enumerate(rows):
+        for row_num, data in enumerate(rows, start=1):
             worksheet.write_row(row_num, 0, _normalize_row(data))
 
     return len(rows)
