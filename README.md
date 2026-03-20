@@ -14,3 +14,9 @@ uv sync
 uv run pdf2xlsx input.pdf
 uv run pdf2xlsx input.pdf --output tables.xlsx --start 0 --end 1
 ```
+
+## Gradio App
+
+```bash
+uv run pdf2xlsx-gradio
+```
