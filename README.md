@@ -8,7 +8,7 @@ sdk_version: 5.23.3
 python_version: "3.13"
 app_file: app.py
 fullWidth: true
-short_description: Extract PDF tables into XLSX with downloadable output and preview.
+short_description: Extract PDF tables to XLSX with preview.
 ---
 
 # pdf2xlsx
