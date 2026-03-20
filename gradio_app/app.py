@@ -1,13 +1,18 @@
 from __future__ import annotations
 
+import sys
 import tempfile
 from pathlib import Path
 from typing import Any
 
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.append(str(PROJECT_ROOT))
+
 import gradio as gr
 import pandas as pd
 
-from .converter import HEADER_ROW, extract_table_rows, extract_tables_to_xlsx
+from pdf2xlsx.converter import HEADER_ROW, extract_table_rows, extract_tables_to_xlsx
 
 
 def convert_pdf_to_xlsx(
@@ -32,14 +37,9 @@ def convert_pdf_to_xlsx(
 
     output_dir = Path(tempfile.mkdtemp(prefix="pdf2xlsx-gradio-"))
     output_path = output_dir / f"{pdf_path.stem}.xlsx"
-    rows = extract_table_rows(
-        pdf_path,
-        start=start_page,
-        end=end_page,
-    )
+    rows = extract_table_rows(pdf_path, start=start_page, end=end_page)
 
     row_count = extract_tables_to_xlsx(pdf_path, output_path, start=start_page, end=end_page)
-
     preview = _build_preview_dataframe(rows[:50])
     return f"Wrote {row_count} row(s) to {output_path.name}.", str(output_path), preview
 
@@ -60,11 +60,7 @@ def build_app() -> gr.Blocks:
         convert = gr.Button("Convert", variant="primary")
         status = gr.Textbox(label="Status", interactive=False)
         download = gr.File(label="XLSX Output")
-        preview = gr.Dataframe(
-            label="Preview",
-            interactive=False,
-            wrap=True,
-        )
+        preview = gr.Dataframe(label="Preview", interactive=False, wrap=True)
 
         convert.click(
             fn=convert_pdf_to_xlsx,
@@ -79,10 +75,6 @@ def main() -> None:
     build_app().launch()
 
 
-if __name__ == "__main__":
-    main()
-
-
 def _preview_headers(rows: list[list[Any]]) -> list[str]:
     max_width = max((len(row) for row in rows), default=len(HEADER_ROW))
     data_column_count = max(max_width - 3, 1)
@@ -90,13 +82,14 @@ def _preview_headers(rows: list[list[Any]]) -> list[str]:
 
 
 def _build_preview_dataframe(rows: list[list[Any]]) -> pd.DataFrame:
-    normalized_rows = [
-        ["" if value is None else value for value in row]
-        for row in rows
-    ]
+    normalized_rows = [["" if value is None else value for value in row] for row in rows]
     headers = _preview_headers(normalized_rows)
-    padded_rows = [
-        [*row, *([""] * (len(headers) - len(row)))]
-        for row in normalized_rows
-    ]
+    padded_rows = [[*row, *([""] * (len(headers) - len(row)))] for row in normalized_rows]
     return pd.DataFrame(padded_rows, columns=headers)
+
+
+demo = build_app()
+
+
+if __name__ == "__main__":
+    main()

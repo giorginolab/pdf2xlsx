@@ -6,7 +6,7 @@ colorTo: green
 sdk: gradio
 sdk_version: 5.23.3
 python_version: "3.13"
-app_file: app.py
+app_file: gradio_app/app.py
 fullWidth: true
 short_description: Extract PDF tables to XLSX with preview.
 ---
@@ -21,6 +21,7 @@ Live app: https://huggingface.co/spaces/tonigi/pdf2xlsx
 
 ```bash
 uv sync
+uv sync --extra gradio
 ```
 
 ## Usage
@@ -33,5 +34,5 @@ uv run pdf2xlsx input.pdf --output tables.xlsx --start 0 --end 1
 ## Gradio App
 
 ```bash
-uv run pdf2xlsx-gradio
+uv run --extra gradio python gradio_app/app.py
 ```

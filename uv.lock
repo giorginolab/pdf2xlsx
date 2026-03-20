@@ -742,21 +742,26 @@ name = "pdf2xlsx"
 version = "0.1.0"
 source = { editable = "." }
 dependencies = [
-    { name = "gradio" },
-    { name = "pandas" },
     { name = "pdf2docx" },
     { name = "typer" },
     { name = "xlsxwriter" },
 ]
 
+[package.optional-dependencies]
+gradio = [
+    { name = "gradio" },
+    { name = "pandas" },
+]
+
 [package.metadata]
 requires-dist = [
-    { name = "gradio", specifier = ">=5.23.3" },
-    { name = "pandas", specifier = ">=2.2.3" },
+    { name = "gradio", marker = "extra == 'gradio'", specifier = ">=5.23.3" },
+    { name = "pandas", marker = "extra == 'gradio'", specifier = ">=2.2.3" },
     { name = "pdf2docx", specifier = ">=0.5.12" },
     { name = "typer", specifier = ">=0.24.1" },
     { name = "xlsxwriter", specifier = ">=3.2.9" },
 ]
+provides-extras = ["gradio"]
 
 [[package]]
 name = "pillow"
